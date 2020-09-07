@@ -82,7 +82,12 @@
       "Type": "AWS::EC2::Instance",
       "Properties": {
         "InstanceType"   : { "Ref" : "InstanceType" },
-        "ImageId": { "Fn::GetAtt": [ "AMIInfo", "Id" ] }
+        "ImageId": { "Fn::GetAtt": [ "AMIInfo", "Id" ] },
+        "NetworkInterfaces": [ {
+      "AssociatePublicIpAddress": "true",
+      "DeviceIndex": "0",
+      "SubnetId" : {"Fn::ImportValue" : "Unique-SubnetId"}
+    } ]
       }
     },
  
@@ -104,7 +109,7 @@
         },
         "Handler": { "Fn::Join" : [ "", [{ "Ref": "ModuleName" },".handler"] ] },
         "Role": { "Fn::GetAtt" : ["LambdaExecutionRole", "Arn"] },        
-        "Runtime": "nodejs8.10",
+        "Runtime": "nodejs12.x",
         "Timeout": "30"
       }
     },
